@@ -82,7 +82,9 @@ public struct PublishedObject<Value> {
     private func setParent<Parent: ObservableObject>(_ parentObject: Parent) where Parent.ObjectWillChangePublisher == ObservableObjectPublisher {
         guard parent.objectWillChange == nil else { return }
         parent.objectWillChange = { [weak parentObject] in
-            parentObject?.objectWillChange.send()
+            DispatchQueue.main.async {
+                parentObject?.objectWillChange.send()
+            }
         }
     }
     
